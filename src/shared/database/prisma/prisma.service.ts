@@ -28,4 +28,10 @@ export class PrismaService
       await app.close();
     });
   }
+
+  async cleanDatabase() {
+    if (process.env.NODE_ENV === 'production') return;
+    const models = Reflect.ownKeys(this).filter((key) => key[0] !== '_');
+    return Promise.all(models.map((modelKey) => this[modelKey].deleteMany()));
+  }
 }

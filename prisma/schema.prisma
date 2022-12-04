@@ -1,11 +1,56 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model Member {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  createdAt  DateTime?   @default(now())
+  exercicies Exercicie[]
+
+  @@map("members")
+}
+
+model Exercicie {
+  id          Int        @id @default(autoincrement())
+  memberId    Int
+  name        String     @unique
+  video       String
+  description String?
+  createdAt   DateTime?  @default(now())
+  member      Member     @relation(fields: [memberId], references: [id])
+  trainings   Training[]
+
+  @@map("exercicies")
+}
+
+model Training {
+  id          Int       @id @default(autoincrement())
+  exercicieId Int
+  personalId  String
+  customerId  String
+  video       String
+  description String?
+  createdAt   DateTime? @default(now())
+  expiresIn   DateTime?
+  repeat      String
+  serie       String
+  exercicie   Exercicie @relation(fields: [exercicieId], references: [id])
+
+  @@map("trainings")
+}
+
+model TrainingLog {
+  id         Int       @id @default(autoincrement())
+  trainingId Int
+  customerId String
+  isDone     Boolean?  @default(true)
+  createdAt  DateTime? @default(now())
+
+  @@map("log_trainings")
 }
