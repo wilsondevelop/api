@@ -5,7 +5,7 @@ import { UpdateTrainingDto } from './dto/update-training.dto';
 
 @Injectable()
 export class TrainingsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
   create(createTrainingDto: CreateTrainingDto) {
     return this.prismaService.training.create({ data: createTrainingDto });
   }
@@ -13,7 +13,7 @@ export class TrainingsService {
   findAll() {
     return this.prismaService.training.findMany();
   }
-
+x
   findOne(id: number) {
     return this.prismaService.training.findFirst({ where: { id } });
   }
